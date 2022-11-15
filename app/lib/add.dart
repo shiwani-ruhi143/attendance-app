@@ -123,8 +123,8 @@ class _addState extends State<add> {
                 children: [
                   Row(
                     children: [
-                      Text('Class :   ' + Class().toString(),
-                          style: TextStyle(fontSize: 15.sp)),
+                      Text('Class :   ' + Class().toString().toUpperCase(),
+                          style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.bold)),
                       // DropdownButton<String>(
                       //   borderRadius: BorderRadius.circular(10.r),
                       //   dropdownColor: Colors.teal[300],
@@ -167,7 +167,7 @@ class _addState extends State<add> {
                     children: [
                       Text(
                         'Year :   ' + Year().toString(),
-                        style: TextStyle(fontSize: 15.sp),
+                        style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.bold),
                       ),
                       // DropdownButton<String>(
                       //   borderRadius: BorderRadius.circular(10.r),
@@ -222,7 +222,7 @@ class _addState extends State<add> {
                   ref.doc(widget.uid).collection('students').add({
                     'name': name.text,
                     'roll': rolln.text,
-                    'isPresent': true,
+                    'isPresent': [],
                   })
                     ..whenComplete(() {
                       Fluttertoast.showToast(
@@ -232,7 +232,7 @@ class _addState extends State<add> {
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.teal[300],
                         textColor: Colors.white,
-                        fontSize: 16.0,
+                        fontSize: 16.sp,
                       );
                       setState(() {
                         name.clear();

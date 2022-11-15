@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,18 +20,70 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.teal,
-        scaffoldBackgroundColor: Colors.teal[50],
-        indicatorColor: Colors.teal,
+        theme: ThemeData(
+          primaryColor: Colors.teal,
+          scaffoldBackgroundColor: Colors.teal[50],
+          indicatorColor: Colors.teal,
+        ),
+        debugShowCheckedModeBanner: false,
+        title: 'Attendance app',
+        home: Splash());
+  }
+}
+
+class Splash extends StatefulWidget {
+  const Splash({super.key});
+
+  @override
+  State<Splash> createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(
+        Duration(seconds: 4),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Home())));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ScreenUtil.init(context);
+    return Scaffold(
+      backgroundColor: Colors.teal,
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 100.h),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/pic.png',
+                height: 300.h,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Text(
+                "Attendance Manager",
+                style: TextStyle(
+                    fontSize: 25.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              // SizedBox(height: 130.h,),
+              
+            ],
+          ),
+        ),
       ),
-      debugShowCheckedModeBanner: false,
-      title: 'Attendance app',
-      home: Home(),
     );
   }
 }
@@ -244,17 +298,19 @@ class _HomeState extends State<Home> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
                   onPressed: () async {
-                 DocumentReference documentReference = await  FirebaseFirestore.instance.collection("classes").add({
+                    DocumentReference documentReference =
+                        await FirebaseFirestore.instance
+                            .collection("classes")
+                            .add({
                       'className': className.text,
                       'count': 0,
                       'class': branch.text,
                       'year': year.text,
                       // 'uuid' : ''
-
                     });
-                  //  await documentReference.update({
-                  //     'uuid' : documentReference.id
-                  //   });
+                    //  await documentReference.update({
+                    //     'uuid' : documentReference.id
+                    //   });
                     setState(() {
                       className.clear();
                       branch.clear();

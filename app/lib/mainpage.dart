@@ -1,3 +1,4 @@
+import 'package:app/add.dart';
 import 'package:app/student_history.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class mainpage extends StatefulWidget {
 }
 
 class _mainpageState extends State<mainpage> {
-  bool isPresent=false;
   CollectionReference ref = FirebaseFirestore.instance.collection('classes');
   Future getClass() async {
     DocumentReference d = ref.doc(widget.uid);
@@ -36,7 +36,6 @@ class _mainpageState extends State<mainpage> {
         branch = value;
       });
     });
-    return branch;
   }
 
   getYearValue() {
@@ -71,22 +70,35 @@ class _mainpageState extends State<mainpage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
         onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => reportt(
-                list: temp,
-                clas: branch.toString() + " " + year.toString(),
-                rollList: rollList,
-              ),
-            ),
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => add(uid: widget.uid)));
         },
         child: Icon(
-          Icons.send,
+          Icons.add,
         ),
       ),
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding:  EdgeInsets.fromLTRB(0,0,10.w,0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => reportt(
+                        list: temp,
+                        clas: branch.toString().toUpperCase() +
+                            " " +
+                            year.toString().toUpperCase(),
+                        rollList: rollList,
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.file_download, size: 25.sp)),
+          )
+        ],
         backgroundColor: Colors.teal,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -101,9 +113,9 @@ class _mainpageState extends State<mainpage> {
               width: 15.w,
             ),
             if (branch != null) Text(branch!.toUpperCase()),
-            // SizedBox(
-            //   width: 10,
-            // ),
+            SizedBox(
+              width: 10.w,
+            ),
             if (year != null) Text("${year!} year"),
             SizedBox(
               width: 25,
@@ -133,17 +145,40 @@ class _mainpageState extends State<mainpage> {
                 child: ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (_, index) {
+                    List<int> date = [];
+                    for (var value
+                        in snapshot.data!.docChanges[index].doc['isPresent']) {
+                      int tmpDate = value.toDate().day;
+                      date.add(tmpDate);
+                    }
+                    bool isPresent = date.contains(DateTime.now().day);
+
+                    if (isPresent) {
+                      temp.add(snapshot.data!.docChanges[index].doc['name']
+                          .toString()
+                          .toUpperCase());
+                      rollList
+                          .add(snapshot.data!.docChanges[index].doc['roll']);
+                    }
+
+                    //_____________//
+
                     return InkWell(
                       onTap: () {
-                        List<DateTime> date =[];
-                        for(var value in snapshot.data!.docChanges[index].doc['isPresent']) {
+                        List<DateTime> date = [];
+                        for (var value in snapshot
+                            .data!.docChanges[index].doc['isPresent']) {
                           DateTime tmpDate = value.toDate();
                           date.add(tmpDate);
                         }
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => StudentHistory(name: snapshot.data!.docChanges[index].doc['name'],date: date,)));
+                                builder: (context) => StudentHistory(
+                                      name: snapshot
+                                          .data!.docChanges[index].doc['name'],
+                                      date: date,
+                                    )));
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -171,46 +206,52 @@ class _mainpageState extends State<mainpage> {
                                     fontWeight: FontWeight.w700,
                                     color: Colors.teal[700])),
                             trailing: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if(isPresent==false){
-                                  //try to add
-                                  }
-                                  if (temp.contains(snapshot.data!
-                                          .docChanges[index].doc['name']) &&
-                                      rollList.contains(snapshot.data!
-                                          .docChanges[index].doc['roll'])) {
-                                    temp.remove(snapshot
-                                        .data!.docChanges[index].doc['name']);
-                                    rollList.remove(snapshot
-                                        .data!.docChanges[index].doc['roll']);
-                                  } else {
-                                    temp.add(snapshot
-                                        .data!.docChanges[index].doc['name']);
-                                    rollList.add(snapshot
-                                        .data!.docChanges[index].doc['roll']);
-                                  }
-                                });
+                              onTap: () async {
+                                if (isPresent == false) {
+                                  //try to add current date in array
+                                  await snapshot
+                                      .data!.docChanges[index].doc.reference
+                                      .update({
+                                    'isPresent':
+                                        FieldValue.arrayUnion([DateTime.now()])
+                                  });
+                                  setState(() {
+                                    isPresent = true;
+                                  });
+                                } else {
+                                  //try to remove the current date in array
+                                  setState(() {
+                                    isPresent = false;
+                                  });
+                                }
+                                if (temp.contains(snapshot
+                                        .data!.docChanges[index].doc['name']) &&
+                                    rollList.contains(snapshot
+                                        .data!.docChanges[index].doc['roll'])) {
+                                  temp.remove(snapshot
+                                      .data!.docChanges[index].doc['name']);
+                                  rollList.remove(snapshot
+                                      .data!.docChanges[index].doc['roll']);
+                                } else {
+                                  temp.add(snapshot
+                                      .data!.docChanges[index].doc['name']);
+                                  rollList.add(snapshot
+                                      .data!.docChanges[index].doc['roll']);
+                                }
                               },
                               child: Container(
-                                height: 40,
-                                width: 100,
+                                height: 40.h,
+                                width: 100.w,
                                 decoration: BoxDecoration(
-                                  color: temp.contains(snapshot
-                                          .data!.docChanges[index].doc['name'])
-                                      ? Colors.red
-                                      : Colors.teal,
+                                  color: isPresent ? Colors.red : Colors.teal,
                                   borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    temp.contains(snapshot.data!
-                                            .docChanges[index].doc['name'])
-                                        ? 'Absent'
-                                        : 'Present',
+                                    isPresent ? 'Mark Absent' : 'Mark Present',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -224,7 +265,39 @@ class _mainpageState extends State<mainpage> {
                 ),
               );
             } else {
-              return Center();
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 55.w),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        add(uid: widget.uid)));
+                          },
+                          icon: Icon(
+                            Icons.add_circle,
+                            color: Colors.grey,
+                            size: 50.h,
+                          )),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Center(
+                          child: Text(
+                        "No students added yet. Click add button to add students.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black),
+                      ))
+                    ],
+                  ),
+                ),
+              );
             }
           } else {
             return Center();
