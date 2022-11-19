@@ -104,6 +104,7 @@ class _addState extends State<add> {
               ),
               TextField(
                 textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
                 controller: rolln,
                 textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(

@@ -46,10 +46,10 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(
-        Duration(seconds: 4),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home())));
+    // Timer(
+    //     Duration(seconds: 4),
+    //     () => Navigator.pushReplacement(
+    //         context, MaterialPageRoute(builder: (context) => Home())));
   }
 
   @override
@@ -64,22 +64,27 @@ class _SplashState extends State<Splash> {
             // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/pic.png',
-                height: 300.h,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
               Text(
-                "Attendance Manager",
+                "ATTENDANCE MANAGER",
                 style: TextStyle(
                     fontSize: 25.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
+              SizedBox(
+                height: 30.h,
+              ),
+              Image.asset(
+                'assets/images/pic.png',
+                height: 300.h,
+              ),
+              SizedBox(height: 50.h,),
+              Text(
+                '"Attend Today, Achieve Tomorrow"',
+                style: TextStyle(color: Colors.white,fontSize: 15.sp),
+              ),
+
               // SizedBox(height: 130.h,),
-              
             ],
           ),
         ),

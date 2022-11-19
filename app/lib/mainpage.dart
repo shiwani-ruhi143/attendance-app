@@ -80,7 +80,7 @@ class _mainpageState extends State<mainpage> {
       appBar: AppBar(
         actions: [
           Padding(
-            padding:  EdgeInsets.fromLTRB(0,0,10.w,0),
+            padding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
             child: IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -88,9 +88,7 @@ class _mainpageState extends State<mainpage> {
                     MaterialPageRoute(
                       builder: (context) => reportt(
                         list: temp,
-                        clas: branch.toString().toUpperCase() +
-                            " " +
-                            year.toString().toUpperCase(),
+                        clas: "${branch.toString().toUpperCase()} ${year.toString().toUpperCase()}",
                         rollList: rollList,
                       ),
                     ),
@@ -106,11 +104,11 @@ class _mainpageState extends State<mainpage> {
             Text(
               'Attendance',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 18.sp,
               ),
             ),
             SizedBox(
-              width: 15.w,
+              width: 5.w,
             ),
             if (branch != null) Text(branch!.toUpperCase()),
             SizedBox(
@@ -154,11 +152,14 @@ class _mainpageState extends State<mainpage> {
                     bool isPresent = date.contains(DateTime.now().day);
 
                     if (isPresent) {
-                      temp.add(snapshot.data!.docChanges[index].doc['name']
-                          .toString()
-                          .toUpperCase());
-                      rollList
-                          .add(snapshot.data!.docChanges[index].doc['roll']);
+                      if (!rollList.contains(
+                          snapshot.data!.docChanges[index].doc['roll'])) {
+                        temp.add(snapshot.data!.docChanges[index].doc['name']
+                            .toString()
+                            .toUpperCase());
+                        rollList
+                            .add(snapshot.data!.docChanges[index].doc['roll']);
+                      }
                     }
 
                     //_____________//
@@ -224,31 +225,40 @@ class _mainpageState extends State<mainpage> {
                                     isPresent = false;
                                   });
                                 }
-                                if (temp.contains(snapshot
-                                        .data!.docChanges[index].doc['name']) &&
-                                    rollList.contains(snapshot
-                                        .data!.docChanges[index].doc['roll'])) {
-                                  temp.remove(snapshot
-                                      .data!.docChanges[index].doc['name']);
-                                  rollList.remove(snapshot
-                                      .data!.docChanges[index].doc['roll']);
-                                } else {
+                                if (!rollList.contains(snapshot
+                                    .data!.docChanges[index].doc['roll'])) {
                                   temp.add(snapshot
-                                      .data!.docChanges[index].doc['name']);
+                                      .data!.docChanges[index].doc['name']
+                                      .toString()
+                                      .toUpperCase());
                                   rollList.add(snapshot
                                       .data!.docChanges[index].doc['roll']);
                                 }
+                                // if (temp.contains(snapshot
+                                //         .data!.docChanges[index].doc['name']) &&
+                                //     rollList.contains(snapshot
+                                //         .data!.docChanges[index].doc['roll'])) {
+                                //   temp.remove(snapshot
+                                //       .data!.docChanges[index].doc['name']);
+                                //   rollList.remove(snapshot
+                                //       .data!.docChanges[index].doc['roll']);
+                                // } else {
+                                //   temp.add(snapshot
+                                //       .data!.docChanges[index].doc['name']);
+                                //   rollList.add(snapshot
+                                //       .data!.docChanges[index].doc['roll']);
+                                // }
                               },
                               child: Container(
                                 height: 40.h,
                                 width: 100.w,
                                 decoration: BoxDecoration(
-                                  color: isPresent ? Colors.red : Colors.teal,
+                                  color: isPresent ? Colors.teal:Colors.red ,
                                   borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    isPresent ? 'Mark Absent' : 'Mark Present',
+                                    isPresent ? 'Present' : 'Mark Present',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
