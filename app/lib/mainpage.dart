@@ -110,13 +110,13 @@ class _mainpageState extends State<mainpage> {
             SizedBox(
               width: 5.w,
             ),
-            if (branch != null) Text(branch!.toUpperCase()),
+            if (branch != null) Text("("+branch!.toUpperCase(),style: TextStyle(fontSize: 15.sp),),
             SizedBox(
-              width: 10.w,
+              width: 5.w,
             ),
-            if (year != null) Text("${year!} year"),
+            if (year != null) Text("${year!} year)",style: TextStyle(fontSize: 15.sp),),
             SizedBox(
-              width: 25,
+              width: 25.w,
             ),
           ],
         ),
