@@ -11,6 +11,7 @@ class mainpage extends StatefulWidget {
   mainpage({required this.uid});
   @override
   State<mainpage> createState() => _mainpageState();
+  
 }
 
 class _mainpageState extends State<mainpage> {

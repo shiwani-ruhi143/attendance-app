@@ -184,7 +184,7 @@ class _reporttState extends State<reportt> {
                               pw.Text(
                                 list[index],
                                 textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(fontSize: 20.0),
+                                style: pw.TextStyle(fontSize: 20),
                               ),
                             ],
                           ),
@@ -200,7 +200,7 @@ class _reporttState extends State<reportt> {
         },
       ),
     );
-
+    
     return doc.save();
   }
 }

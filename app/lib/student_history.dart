@@ -30,20 +30,26 @@ class _StudentHistoryState extends State<StudentHistory> {
                   padding: const EdgeInsets.all(15),
                   child: ListTile(
                     tileColor: Colors.teal[100],
-                    title: Text(widget.date.elementAt(index).day.toString() +
-                        "-" +
-                        widget.date.elementAt(index).month.toString() +
-                        "-" +
-                        widget.date.elementAt(index).year.toString() +
-                        " at " +
-                        widget.date.elementAt(index).hour.toString() +
-                        ":" +
-                        widget.date.elementAt(index).minute.toString(),style:TextStyle(color: Colors.teal[900],fontSize: 15.sp,fontWeight: FontWeight.w500)),
+                    title: Text(
+                        widget.date.elementAt(index).day.toString() +
+                            "-" +
+                            widget.date.elementAt(index).month.toString() +
+                            "-" +
+                            widget.date.elementAt(index).year.toString() +
+                            " at " +
+                            widget.date.elementAt(index).hour.toString() +
+                            ":" +
+                            widget.date.elementAt(index).minute.toString(),
+                        style: TextStyle(
+                            color: Colors.teal[900],
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w500)),
                     trailing: Text(
                       "Present",
                       style: TextStyle(
-                        color: Colors.teal[900],
-                          fontWeight: FontWeight.bold, fontSize: 20.sp),
+                          color: Colors.teal[900],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.sp),
                     ),
                   ),
                 );
